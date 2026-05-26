@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Golfa Klikšķeris</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="stat-box">
+      <h2 id="shots">0</h2>
+      <p>Sitieni (Punkti)</p>
+    </div>
+    <div class="stat-box">
+      <h2 id="chance">1.00%</h2>
+      <p>Hole In One Iespēja</p>
+    </div>
+    <div class="stat-box">
+      <h2 id="perClick">1</h2>
+      <p>Punkti par klikšķi</p>
+    </div>
+    <button id="rebirthBtn" onclick="doRebirth()" disabled>Rebirth (1M)</button>
+  </div>
+
+  <div class="game-zone" id="gameZone">
+    
+    <div class="event-sidebar" id="eventBox">
+      <h3>Zibens Izaicinājums</h3>
+      <p id="eventStatus">Gatavs!</p>
+      <p id="eventTime">Laiks: 30s</p>
+      <p id="eventBonus">Balva: +25</p>
+      <button id="eventBtn" onclick="handleEventClick()">PEŅEMT</button>
+    </div>
+
+    <div class="upgrades-overlay">
+      <h2>Uzlabojumi</h2>
+
+      <div class="upgrade club-upgrade">
+        <h3 id="clubName">Koka nūja (Lvl 1)</h3>
+        <img id="clubPic" src="https://thumbs.dreamstime.com/z/broken-golf-club-d-render-illustration-isolated-white-31571075.jpg?ct=jpeg" alt="Nūja">
+        <p>+25% Hole In One vērtība</p>
+        <button id="btnClub" onclick="buyClub()">Uzlabot nūju - 150</button>
+      </div>
+
+      <div class="upgrade">
+        <h3>Hole In One precizitāte</h3>
+        <p>+2% Hole In One iespēja</p>
+        <button id="btnChance" onclick="buyChance()">Pirkt - 200</button>
+      </div>
+
+      <div class="upgrade">
+        <h3>Treniņu nodarbības</h3>
+        <p>+1 punkts par klikšķi</p>
+        <button id="btnLessons" onclick="buyLessons()">Pirkt - 100</button>
+      </div>
+
+      <div class="upgrade">
+        <h3>Golfa mašīnas asistents</h3>
+        <p>+5 punkti par klikšķi</p>
+        <button id="btnCart" onclick="buyCart()">Pirkt - 400</button>
+      </div>
+    </div>
+
+    <div class="click-area">
+      <div class="golf-hole" onclick="swing()">
+        <img id="golfPic" src="https://gemini.google.com/share/4a66a7283831" alt="Golfa Bedrīte">
+      </div>
+      <div class="click-text" id="worldTitle">KLIKŠĶINI UZ KARODZIŅA!</div>
+    </div>
+
+  </div>
+
+  <script src="spele.js"></script>
+</body>
+</html>
