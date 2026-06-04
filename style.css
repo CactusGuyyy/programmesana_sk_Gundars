@@ -8,9 +8,10 @@
 body {
   background: #0b1220;
   color: white;
-  overflow: hidden;
+  overflow: hidden; /* Neļauj lapai ritināties uz leju */
 }
 
+/* Augšējā josla */
 .topbar {
   width: 100%;
   height: 90px;
@@ -18,88 +19,47 @@ body {
   border-bottom: 2px solid #1f2937;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 20px;
+  justify-content: space-between;
+  padding: 0 30px;
 }
 
-.stat-box { text-align: center; }
-.stat-box h2 { color: #84cc16; font-size: 28px; }
-.stat-box p { color: #cbd5e1; font-size: 14px; margin-top: 3px; }
-
-#rebirthBtn {
-  padding: 10px 20px;
-  background: #374151;
-  color: #9ca3af;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: not-allowed;
-  transition: 0.3s;
+.stat-box { 
+  text-align: center; 
 }
 
-#rebirthBtn.ready {
-  background: #d946ef;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 0 15px #d946ef;
+.stat-box h2 { 
+  color: #84cc16; 
+  font-size: 28px; 
+  font-weight: bold; 
+}
+
+.stat-box p { 
+  color: #cbd5e1; 
+  font-size: 14px; 
+  margin-top: 3px; 
+}
+
+.topbar-rebirth-btn {
+  width: 140px;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  text-align: center;
 }
 
 .game-zone {
   display: flex;
   height: calc(100vh - 90px);
-  position: relative;
-  background-image: url('https://placehold.co/1920x1080?text=Sākuma+Pasaule+Fons');
-  background-size: cover;
-  background-position: center;
 }
 
-.event-sidebar {
-  width: 220px;
-  background: rgba(159, 18, 57, 0.9);
-  border-right: 3px solid #be123c;
-  backdrop-filter: blur(5px);
-  height: 100%;
-  padding: 20px;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  box-shadow: inset -10px 0 20px rgba(0,0,0,0.3);
-}
-
-.event-sidebar h3 { font-size: 18px; margin-bottom: 15px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-.event-sidebar p { font-size: 15px; margin: 8px 0; color: #ffe4e6; font-weight: bold; }
-
-.event-sidebar button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  background: white;
-  color: #9f1212;
-  border: none;
-  font-weight: bold;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-.event-sidebar button:active {
-  transform: scale(0.95);
-}
-
+/* Uzlabojumu josla */
 .upgrades-overlay {
   width: 300px;
-  background: rgba(17, 24, 39, 0.85);
-  backdrop-filter: blur(5px);
+  background: #111827;
   height: 100%;
   padding: 20px;
-  border-right: 2px solid rgba(31, 41, 55, 0.5);
-  overflow-y: auto;
+  border-right: 2px solid #1f2937;
 }
-
-.upgrades-overlay h2 { color: #84cc16; margin-bottom: 15px; font-size: 22px; }
 
 .upgrade {
   background: #1e293b;
@@ -109,34 +69,28 @@ body {
   border: 1px solid #334155;
 }
 
-.club-upgrade {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-#clubPic {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin: 8px 0;
-  border-radius: 8px;
-  background: #111827;
-  padding: 5px;
-}
-
 .upgrade h3 { font-size: 16px; margin-bottom: 5px; }
 .upgrade p { color: #cbd5e1; font-size: 12px; margin-bottom: 8px; }
 
-.upgrade button {
+button {
   width: 100%;
   padding: 8px;
   border: none;
   border-radius: 6px;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+/* Pelēka poga Rebirth un bloķētajiem uzlabojumiem */
+.disabled-btn {
+  background: #374151;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.active-btn {
   background: #84cc16;
   color: #111827;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -146,36 +100,44 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: #14532d;
+  position: relative;
+  transition: background 0.5s ease;
 }
 
-.golf-hole {
-  width: 200px;
-  height: 200px;
+/* Hole in One stūra paziņojums */
+#hioCornerNotice {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(220, 38, 38, 0.9);
+  color: white;
+  padding: 15px 25px;
+  font-size: 22px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+  display: none;
+  z-index: 10;
+}
+
+#clubBtn {
+  width: 260px;        
+  height: 260px;       
+  object-fit: cover;
+  border-radius: 20px; 
+  border: 4px solid #84cc16; 
   cursor: pointer;
   transition: 0.08s;
 }
 
-.golf-hole:active {
+#clubBtn:active {
   transform: scale(0.95);
 }
 
-#golfPic {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.click-text { margin-top: 20px; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
-
-.popup {
-  position: absolute;
-  font-size: 28px;
-  font-weight: bold;
-  animation: floatUp 1s forwards;
-  pointer-events: none;
-}
-
-@keyframes floatUp {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-100px); }
+.click-text { 
+  margin-top: 20px; 
+  font-size: 24px; 
+  font-weight: bold; 
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6); 
 }

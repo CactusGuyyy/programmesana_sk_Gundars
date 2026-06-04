@@ -1,270 +1,228 @@
-let shots = 0;
-let shotsPerClick = 1;
-let holeChance = 0.01;
-let hioMultiplier = 10;
-let clubLevel = 1;
-let rebirthCount = 0;
+const shotsDisplay = document.getElementById("shots")
+const chanceDisplay = document.getElementById("chance")
+const perClickDisplay = document.getElementById("perClick")
+const hioCornerNotice = document.getElementById("hioCornerNotice")
+const worldTitle = document.getElementById("worldTitle")
+const clickAreaZone = document.getElementById("clickAreaZone")
+const clickInstruction = document.getElementById("clickInstruction")
+const clubBtn = document.getElementById("clubBtn")
 
-let clubCost = 150;
-let chanceCost = 200;
-let lessonsCost = 100;
-let cartCost = 400;
+const lessonsDesc = document.getElementById("lessonsDesc")
+const cartDesc = document.getElementById("cartDesc")
+const autoDesc = document.getElementById("autoDesc")
 
-let rebirthCosts = [1000000, 10000000, 50000000];
+const btnChance = document.getElementById("btnChance")
+const btnLessons = document.getElementById("btnLessons")
+const btnCart = document.getElementById("btnCart")
+const btnAuto = document.getElementById("btnAuto")
+const rebirthBtn = document.getElementById("rebirthBtn")
 
-let eventActive = false;
-let eventAccepted = false;
-let eventClicks = 0;
-let eventTimer = 30;
-let eventInterval;
-let currentEventMaxTime = 30;
-let currentEventReward = 25;
+let amount = 0
+let bonus = 1 
 
-let autoClickerInterval = null;
+let holeInOneChance = 0 
+let holeInOneCost = 500
+let holeInOnePower = 10 
 
-const worldClubs = [
-  ["Koka nūja", "Dzelzs nūja", "Sudraba nūja", "Zelta nūja", "Platīna nūja", "Dimanta nūja"],
-  ["Smaragda nūja", "Rubīna nūja", "Safīra nūja", "Obsidiāna nūja", "Kvarca nūja", "Kosmiskā nūja"],
-  ["Neon nūja", "Lāzera nūja", "Plazmas nūja", "Kibernētiskā nūja", "Kvantus nūja", "Singularitātes nūja"],
-  ["Magmas nūja", "Meteora nūja", "Tektoniskā nūja", "Kodol nūja", "Nemirstības nūja", "Dieva nūja"]
-];
+let lessonsCost = 100
+let cartCost = 400
 
-const worldClubImages = [
-  ["Koks", "Dzelzs", "Sudrabs", "Zelts", "Platina", "Dimants"],
-  ["Smaragds", "Rubins", "Safirs", "Obsidians", "Kvarcs", "Kosmoss"],
-  ["Neons", "Lazers", "Plazma", "Kiber", "Kvanti", "Singularitate"],
-  ["Magma", "Meteors", "Tektonika", "Kodols", "Nemirstiba", "Dievs"]
-];
+let autoPoints = 0
+let autoCost = 300
 
-function swing() {
-  let earned = shotsPerClick;
+let rebirthCost = 5000
+let rebirthMultiplier = 1
+let rebirthCount = 0
 
-  if (Math.random() < holeChance) {
-    earned = shotsPerClick * hioMultiplier;
-    showPopup("HOLE IN ONE! +" + Math.floor(earned), "#facc15");
-  } else {
-    showPopup("+" + earned, "#ffffff");
-  }
+let gameEnded = false
 
-  shots += earned;
-  updateUI();
-}
+function parbauditPogas() {
+    if (gameEnded) return 
 
-function buyClub() {
-  if (clubLevel >= 6) return;
-
-  if (shots >= clubCost) {
-    shots -= clubCost;
-    clubLevel++;
-    hioMultiplier += 2.5;
-    clubCost = Math.floor(clubCost * 2.5);
-    updateUI();
-  } else {
-    alert("Nepietiek punktu!");
-  }
-}
-
-function buyChance() {
-  if (shots >= chanceCost) {
-    shots -= chanceCost;
-    holeChance += 0.02;
-    chanceCost = Math.floor(chanceCost * 1.4);
-    updateUI();
-  } else {
-    alert("Nepietiek punktu!");
-  }
-}
-
-function buyLessons() {
-  if (shots >= lessonsCost) {
-    shots -= lessonsCost;
-    shotsPerClick += 1;
-    lessonsCost = Math.floor(lessonsCost * 1.4);
-    updateUI();
-  } else {
-    alert("Nepietiek punktu!");
-  }
-}
-
-function buyCart() {
-  if (shots >= cartCost) {
-    shots -= cartCost;
-    shotsPerClick += 5;
-    cartCost = Math.floor(cartCost * 1.4);
-    updateUI();
-  } else {
-    alert("Nepietiek punktu!");
-  }
-}
-
-function doRebirth() {
-  if (rebirthCount >= 3) return;
-
-  if (shots >= rebirthCosts[rebirthCount]) {
-    rebirthCount++;
-    shots = 0;
-    
-    clubLevel = 1;
-    clubCost = 150;
-    chanceCost = 200;
-    lessonsCost = 100;
-    cartCost = 400;
-    hioMultiplier = 10;
-
-    const gameZone = document.getElementById("gameZone");
-
-    if (rebirthCount === 1) {
-      shotsPerClick = 10;
-      holeChance = 0.03;
-      gameZone.style.backgroundImage = "url('https://placehold.co/1920x1080?text=Smaragda+Lauki+Fons')";
-      document.getElementById("worldTitle").innerText = "Smaragda Lauki (Rebirth 1)";
-    } else if (rebirthCount === 2) {
-      shotsPerClick = 50;
-      holeChance = 0.06;
-      gameZone.style.backgroundImage = "url('https://placehold.co/1920x1080?text=Neon+Nakts+Fons')";
-      document.getElementById("worldTitle").innerText = "Neon Nakts Kūrorts (Rebirth 2)";
-    } else if (rebirthCount === 3) {
-      shotsPerClick = 250;
-      holeChance = 0.10;
-      gameZone.style.backgroundImage = "url('https://placehold.co/1920x1080?text=Vulkaniskais+Fons')";
-      document.getElementById("worldTitle").innerText = "Vulkāniskais Čempionāts (Rebirth 3)";
-    }
-
-    startAutoclicker();
-    updateUI();
-    alert("Tu esi pārdzimis jaunā pasaulē! Visi uzlabojumi un nūju līmeņi atiestatīti!");
-  }
-}
-
-function startAutoclicker() {
-  if (autoClickerInterval) clearInterval(autoClickerInterval);
-  autoClickerInterval = setInterval(() => {
-    shots += shotsPerClick;
-    updateUI();
-  }, 500);
-}
-
-function updateUI() {
-  document.getElementById("shots").innerText = Math.floor(shots);
-  document.getElementById("chance").innerText = (holeChance * 100).toFixed(2) + "%";
-  document.getElementById("perClick").innerText = shotsPerClick;
-
-  let currentClubList = worldClubs[rebirthCount];
-  let currentImgList = worldClubImages[rebirthCount];
-
-  let currentName = currentClubList[clubLevel - 1] || "Maksimālā nūja";
-  document.getElementById("clubName").innerText = `${currentName} (Lvl ${clubLevel})`;
-
-  let textLabel = currentImgList[clubLevel - 1] || "Maks";
-  document.getElementById("clubPic").src = `https://placehold.co/80x80?text=${textLabel}`;
-
-  const btnClub = document.getElementById("btnClub");
-  if (clubLevel >= 6) {
-    btnClub.innerText = "Maksimālais līmenis";
-    btnClub.disabled = true;
-    btnClub.style.background = "#4b5563";
-    btnClub.style.cursor = "not-allowed";
-  } else {
-    btnClub.innerText = "Uzlabot nūju - " + clubCost;
-    btnClub.disabled = false;
-    btnClub.style.background = "#84cc16";
-    btnClub.style.cursor = "pointer";
-  }
-
-  document.getElementById("btnChance").innerText = "Pirkt - " + chanceCost;
-  document.getElementById("btnLessons").innerText = "Pirkt - " + lessonsCost;
-  document.getElementById("btnCart").innerText = "Pirkt - " + cartCost;
-
-  const rebirthBtn = document.getElementById("rebirthBtn");
-  if (rebirthCount >= 3) {
-    rebirthBtn.disabled = true;
-    rebirthBtn.innerText = "Maksimālā Pasaule";
-    rebirthBtn.classList.remove("ready");
-  } else {
-    let nextCost = rebirthCosts[rebirthCount];
-    rebirthBtn.innerText = `Rebirth (${(nextCost / 1000000).toFixed(0)}M)`;
-    if (shots >= nextCost) {
-      rebirthBtn.disabled = false;
-      rebirthBtn.classList.add("ready");
+    if (amount >= lessonsCost) {
+        btnLessons.className = "active-btn"
     } else {
-      rebirthBtn.disabled = true;
-      rebirthBtn.classList.remove("ready");
+        btnLessons.className = "disabled-btn"
     }
-  }
+    lessonsDesc.innerHTML = "+" + (1 * rebirthMultiplier) + " punkti par klikšķi"
+
+    if (amount >= cartCost) {
+        btnCart.className = "active-btn"
+    } else {
+        btnCart.className = "disabled-btn"
+    }
+    cartDesc.innerHTML = "+" + (5 * rebirthMultiplier) + " punkti par klikšķi"
+
+    if (amount >= holeInOneCost) {
+        btnChance.className = "active-btn"
+    } else {
+        btnChance.className = "disabled-btn"
+    }
+
+    if (rebirthCount >= 1) {
+        autoDesc.innerHTML = "+" + (2 * rebirthMultiplier) + " punkti katru sekundi"
+        if (amount >= autoCost) {
+            btnAuto.className = "active-btn"
+        } else {
+            btnAuto.className = "disabled-btn"
+        }
+    } else {
+        btnAuto.className = "disabled-btn"
+        btnAuto.innerHTML = "Pieejams no Rebirth 1"
+    }
+
+    if (rebirthCount < 2) {
+        if (amount >= rebirthCost) {
+            rebirthBtn.className = "active-btn"
+        } else {
+            rebirthBtn.className = "disabled-btn"
+        }
+    }
 }
 
-function showPopup(text, color) {
-  const popup = document.createElement("div");
-  popup.className = "popup";
-  popup.innerText = text;
-  popup.style.color = color;
-  
-  popup.style.left = (window.innerWidth / 2 + 100) + "px";
-  popup.style.top = (window.innerHeight / 2 - 50) + "px";
+// Pasīvie punkti katru sekundi
+setInterval(() => {
+    if (gameEnded) return
+    if (autoPoints > 0) {
+        amount += (autoPoints * rebirthMultiplier)
+        shotsDisplay.innerHTML = amount
+        parbauditPogas()
+    }
+}, 1000)
 
-  document.body.appendChild(popup);
-  setTimeout(() => popup.remove(), 1000);
-}
+clubBtn.addEventListener("click", () => {
+    if (gameEnded) return 
 
-function triggerEvent() {
-  if (eventActive) return;
-  eventActive = true;
-  eventAccepted = false;
-  eventClicks = 0;
-  eventTimer = currentEventMaxTime;
+    let nejaussSkaitlis = Math.random() * 100
+    let iegutiePunkti = 0
 
-  document.getElementById("eventStatus").innerText = "Gatavs izaicinājumam!";
-  document.getElementById("eventTime").innerText = `Laiks: ${eventTimer}s`;
-  document.getElementById("eventBonus").innerText = `Balva: +${currentEventReward}`;
-  document.getElementById("eventBtn").innerText = "PIEŅEMT";
-  document.getElementById("eventBox").style.display = "flex";
-}
+    if (nejaussSkaitlis < holeInOneChance) {
+        iegutiePunkti = bonus * rebirthMultiplier * holeInOnePower
+        amount += iegutiePunkti
+        
+        hioCornerNotice.style.display = "block"
+        setTimeout(() => {
+            hioCornerNotice.style.display = "none"
+        }, 1500)
+    } else {
+        iegutiePunkti = bonus * rebirthMultiplier
+        amount += iegutiePunkti
+    }
 
-function handleEventClick() {
-  if (!eventActive) return;
+    shotsDisplay.innerHTML = amount
+    parbauditPogas()
+})
 
-  if (!eventAccepted) {
-    eventAccepted = true;
-    document.getElementById("eventBtn").innerText = "SPIED ĀTRI!";
-    document.getElementById("eventStatus").innerText = "Klikšķi: 0/100";
+btnLessons.addEventListener("click", () => {
+    if (gameEnded || amount < lessonsCost) return
+    amount -= lessonsCost
+    bonus += 1 
+    lessonsCost = lessonsCost * 2 
     
-    eventInterval = setInterval(() => {
-      eventTimer--;
-      document.getElementById("eventTime").innerText = `Laiks: ${eventTimer}s`;
+    shotsDisplay.innerHTML = amount
+    perClickDisplay.innerHTML = bonus * rebirthMultiplier
+    btnLessons.innerHTML = "Pirkt - " + lessonsCost
+    parbauditPogas()
+})
 
-      if (eventTimer <= 0) {
-        endEvent(false);
-      }
-    }, 1000);
-  } else {
-    eventClicks++;
-    document.getElementById("eventStatus").innerText = `Klikšķi: ${eventClicks}/100`;
+btnCart.addEventListener("click", () => {
+    if (gameEnded || amount < cartCost) return
+    amount -= cartCost
+    bonus += 5 
+    cartCost = cartCost * 2
+    
+    shotsDisplay.innerHTML = amount
+    perClickDisplay.innerHTML = bonus * rebirthMultiplier
+    btnCart.innerHTML = "Pirkt - " + cartCost
+    parbauditPogas()
+})
 
-    if (eventClicks >= 100) {
-      endEvent(true);
+btnChance.addEventListener("click", () => {
+    if (gameEnded || amount < holeInOneCost) return
+    amount -= holeInOneCost
+    holeInOneChance += 5 
+    holeInOneCost = holeInOneCost * 2
+    
+    shotsDisplay.innerHTML = amount
+    chanceDisplay.innerHTML = holeInOneChance + "%"
+    btnChance.innerHTML = "Pirkt - " + holeInOneCost
+    parbauditPogas()
+})
+
+btnAuto.addEventListener("click", () => {
+    if (gameEnded || rebirthCount < 1 || amount < autoCost) return
+    amount -= autoCost
+    autoPoints += 2 
+    autoCost = autoCost * 2
+    
+    shotsDisplay.innerHTML = amount
+    btnAuto.innerHTML = "Pirkt - " + autoCost + " (Sekundē: +" + (autoPoints * rebirthMultiplier) + ")"
+    parbauditPogas()
+})
+
+rebirthBtn.addEventListener("click", () => {
+    if (gameEnded || amount < rebirthCost) return
+    if (rebirthCount >= 2) return 
+
+    rebirthCount += 1
+    
+    // OTRAIS REBIRTH -> SPĒLES BEIGAS
+    if (rebirthCount === 2) {
+        gameEnded = true 
+        amount = "MAX"
+        shotsDisplay.innerHTML = amount
+        
+        // Fons paliek violetais, kāds tas kļuva pie Rebirth 1
+        clickAreaZone.style.background = "#3b0764" 
+        worldTitle.innerHTML = "Pasaule: Čempiona fināls"
+        clickInstruction.innerHTML = "APSVEICAM! TU PABEIDZI SPĒLI!"
+        clickInstruction.style.color = "#facc15" 
+        
+        clubBtn.style.display = "none"
+
+        btnLessons.className = "disabled-btn"
+        btnCart.className = "disabled-btn"
+        btnChance.className = "disabled-btn"
+        btnAuto.className = "disabled-btn"
+        
+        rebirthBtn.className = "disabled-btn"
+        rebirthBtn.innerHTML = "Spēle pabeigta!"
+        
+        alert("Apsveicam! Tu pabeidzi spēli un sasniedzi maksimālo līmeni!")
+        return 
     }
-  }
-}
 
-function endEvent(success) {
-  clearInterval(eventInterval);
-  eventActive = false;
-  document.getElementById("eventBox").style.display = "none";
+    // Pirmais rebirth, fons pārvēršas par violeto
+    amount = 0
+    bonus = 1 
+    holeInOneChance = 0
+    autoPoints = 0 
+    
+    lessonsCost = 100
+    cartCost = 400
+    holeInOneCost = 500
+    autoCost = 300
+    
+    rebirthMultiplier = rebirthMultiplier * 2 
+    rebirthCost = rebirthCost * 2 
+    
+    shotsDisplay.innerHTML = amount
+    perClickDisplay.innerHTML = bonus * rebirthMultiplier
+    chanceDisplay.innerHTML = holeInOneChance + "%"
+    
+    btnLessons.innerHTML = "Pirkt - " + lessonsCost
+    btnCart.innerHTML = "Pirkt - " + cartCost
+    btnChance.innerHTML = "Pirkt - " + holeInOneCost
+    rebirthBtn.innerHTML = "Rebirth (" + rebirthCost + ")"
+    btnAuto.innerHTML = "Pirkt - " + autoCost
+    
+    worldTitle.innerHTML = "Pasaule: Rebirth zona Lvl 1"
 
-  if (success) {
-    shotsPerClick += currentEventReward;
-    currentEventMaxTime = Math.max(5, currentEventMaxTime - 10);
-    currentEventReward += 100;
-    updateUI();
-    alert("Izaicinājums izpildīts! Nākamais būs ātrāks un vērtīgāks!");
-  } else {
-    currentEventMaxTime = 30;
-    currentEventReward = 25;
-    alert("Laiks beidzās! Izaicinājuma grūtība atiestatīta.");
-  }
+    // Nomaina sākuma zaļo fonu uz violeto
+    clickAreaZone.style.background = "#3b0764"
 
-  setTimeout(triggerEvent, 60000);
-}
+    parbauditPogas()
+    alert("Pirmais Rebirth veikts! Fons nomainīts un tagad visi punkti nāk dubultā!")
+})
 
-setTimeout(triggerEvent, 30000);
-updateUI();
+parbauditPogas()

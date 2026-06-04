@@ -14,60 +14,51 @@
       <p>Sitieni (Punkti)</p>
     </div>
     <div class="stat-box">
-      <h2 id="chance">1.00%</h2>
+      <h2 id="chance">0%</h2>
       <p>Hole In One Iespēja</p>
     </div>
     <div class="stat-box">
       <h2 id="perClick">1</h2>
       <p>Punkti par klikšķi</p>
     </div>
-    <button id="rebirthBtn" onclick="doRebirth()" disabled>Rebirth (1M)</button>
+    <button id="rebirthBtn" class="disabled-btn">Rebirth (5000)</button>
   </div>
 
-  <div class="game-zone" id="gameZone">
+  <div class="game-zone">
     
-    <div class="event-sidebar" id="eventBox">
-      <h3>Zibens Izaicinājums</h3>
-      <p id="eventStatus">Gatavs!</p>
-      <p id="eventTime">Laiks: 30s</p>
-      <p id="eventBonus">Balva: +25</p>
-      <button id="eventBtn" onclick="handleEventClick()">PEŅEMT</button>
-    </div>
-
     <div class="upgrades-overlay">
-      <h2>Uzlabojumi</h2>
-
-      <div class="upgrade club-upgrade">
-        <h3 id="clubName">Koka nūja (Lvl 1)</h3>
-        <img id="clubPic" src="https://thumbs.dreamstime.com/z/broken-golf-club-d-render-illustration-isolated-white-31571075.jpg?ct=jpeg" alt="Nūja">
-        <p>+25% Hole In One vērtība</p>
-        <button id="btnClub" onclick="buyClub()">Uzlabot nūju - 150</button>
-      </div>
+      <h2 id="worldTitle" style="color: #cbd5e1; font-size: 14px; margin-bottom: 10px; font-weight: bold;">Pasaule: Sākuma laukums</h2>
+      <h2 style="color: #84cc16; margin-bottom: 15px; font-size: 22px;">Uzlabojumi</h2>
 
       <div class="upgrade">
         <h3>Hole In One precizitāte</h3>
-        <p>+2% Hole In One iespēja</p>
-        <button id="btnChance" onclick="buyChance()">Pirkt - 200</button>
+        <p>+5% Hole In One iespēja</p>
+        <button id="btnChance" class="disabled-btn">Pirkt - 500</button>
       </div>
 
       <div class="upgrade">
         <h3>Treniņu nodarbības</h3>
-        <p>+1 punkts par klikšķi</p>
-        <button id="btnLessons" onclick="buyLessons()">Pirkt - 100</button>
+        <p id="lessonsDesc">+1 punkts par klikšķi</p>
+        <button id="btnLessons" class="disabled-btn">Pirkt - 100</button>
       </div>
 
       <div class="upgrade">
         <h3>Golfa mašīnas asistents</h3>
-        <p>+5 punkti par klikšķi</p>
-        <button id="btnCart" onclick="buyCart()">Pirkt - 400</button>
+        <p id="cartDesc">+5 punkti par klikšķi</p>
+        <button id="btnCart" class="disabled-btn">Pirkt - 400</button>
+      </div>
+
+      <div class="upgrade">
+        <h3>Automātiskais trenažieris</h3>
+        <p id="autoDesc">+2 punkti katru sekundi</p>
+        <button id="btnAuto" class="disabled-btn">Pieejams no Rebirth 1</button>
       </div>
     </div>
 
-    <div class="click-area">
-      <div class="golf-hole" onclick="swing()">
-        <img id="golfPic" src="https://gemini.google.com/share/4a66a7283831" alt="Golfa Bedrīte">
-      </div>
-      <div class="click-text" id="worldTitle">KLIKŠĶINI UZ KARODZIŅA!</div>
+    <div class="click-area" id="clickAreaZone">
+      <div id="hioCornerNotice">HOLE IN ONE!</div>
+      <img id="clubBtn" src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?auto=format&fit=crop&w=200&q=80">
+      <div class="click-text" id="clickInstruction">KLIKŠĶINI UZ GOLFA KLUBA!</div>
     </div>
 
   </div>
